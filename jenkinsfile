@@ -1,30 +1,27 @@
 pipeline {
     agent any
-
     stages {
         stage('Clone') {
             steps {
-                git 'https://github.com/Saranya2308/github.io.git'
+                git branch: 'main', url: 'https://github.com/Saranya2308/github.io.git'
             }
         }
-
         stage('Show HTML Output') {
             steps {
-                powershell """
-                    \$html = Get-Content index.html -Raw
-                    \$doc = New-Object -ComObject HTMLFile
-                    \$doc.IHTMLDocument2_write(\$html)
-                    \$doc.IHTMLDocument2_close()
-                    Write-Output \$doc.title
-                    Write-Output \$doc.body.innerText
-                """
+                powershell 'Select-String "<h1>(.*?)</h1>" index.html | ForEach-Object { $_.Matches[0].Groups[1].Value }'
+                powershell 'Select-String "Hello, World!" index.html'
             }
         }
-
         stage('Deploy') {
             steps {
-                // Optional: deploy HTML to a folder or server
-                bat 'copy index.html C:\\inetpub\\wwwroot\\'
+                // Define the deployment path
+                def deployPath = 'C:\\Users\\Windows\\Desktop\\DeployedSite\\'
+
+                // Create the folder if it doesn't exist
+                bat """
+                if not exist "${deployPath}" mkdir "${deployPath}"
+                copy index.html "${deployPath}"
+                """
             }
         }
     }
