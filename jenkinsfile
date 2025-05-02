@@ -16,7 +16,7 @@ pipeline {
             steps {
                 script {
                     // Define the deployment path
-                    def deployPath = 'C:\\Users\\<YourUsername>\\Desktop\\DeployedSite\\'
+                    def deployPath = 'C:\\Users\\Windows\\Desktop\\DeployedSite\\'
                     
                     // Create the folder if it doesn't exist
                     bat """
