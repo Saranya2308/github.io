@@ -14,14 +14,16 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                // Define the deployment path
-                def deployPath = 'C:\\Users\\Windows\\Desktop\\DeployedSite\\'
-
-                // Create the folder if it doesn't exist
-                bat """
-                if not exist "${deployPath}" mkdir "${deployPath}"
-                copy index.html "${deployPath}"
-                """
+                script {
+                    // Define the deployment path
+                    def deployPath = 'C:\\Users\\<YourUsername>\\Desktop\\DeployedSite\\'
+                    
+                    // Create the folder if it doesn't exist
+                    bat """
+                    if not exist "${deployPath}" mkdir "${deployPath}"
+                    copy index.html "${deployPath}"
+                    """
+                }
             }
         }
     }
