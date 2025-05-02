@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clone') {
+            steps {
+                git 'https://github.com/Saranya2308/github.io.git'
+            }
+        }
+
+        stage('Show HTML Output') {
+            steps {
+                powershell """
+                    \$html = Get-Content index.html -Raw
+                    \$doc = New-Object -ComObject HTMLFile
+                    \$doc.IHTMLDocument2_write(\$html)
+                    \$doc.IHTMLDocument2_close()
+                    Write-Output \$doc.title
+                    Write-Output \$doc.body.innerText
+                """
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                // Optional: deploy HTML to a folder or server
+                bat 'copy index.html C:\\inetpub\\wwwroot\\'
+            }
+        }
+    }
+}
